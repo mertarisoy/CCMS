@@ -1,0 +1,41 @@
+﻿@using CreditCardManagementSystem.Models
+@using SelectListItem = System.Web.Mvc.SelectListItem
+@model Register
+@{
+    ViewBag.Title = "Register";
+    List<SelectListItem> roles = new List<SelectListItem>()
+    {
+        new SelectListItem()
+        { 
+            Text="admin", 
+            Value="admin"
+        },
+        new SelectListItem()
+        { 
+            Text="user",
+            Value="user"
+        },
+        new SelectListItem()
+        { 
+            Text="guest", 
+            Value="guest"
+        }
+    };  
+}
+
+<h2>Create new User</h2>
+<div>
+    @using (@Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <label>Enter Username</label>
+        @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+        <label>Enter Password</label>
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        <label>Role</label>
+        @Html.DropDownList("role",roles, "select a role");
+        
+        <button class="btn btn-primary">Create</button>
+    }
+</div>

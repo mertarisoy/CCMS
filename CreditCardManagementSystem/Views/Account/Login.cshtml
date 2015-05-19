@@ -1,0 +1,19 @@
+﻿@using CreditCardManagementSystem.Models
+@model Login
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Enter your credetial Please</h2>
+<div>
+    @using (@Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <label>Enter Username</label>
+        @Html.TextBoxFor(m => m.Username , new { @class="form-control"})
+        <label>Enter Password</label>
+        @Html.PasswordFor(m => m.Password , new { @class="form-control"})
+        <button class="btn btn-primary">Login</button>
+    }
+</div>

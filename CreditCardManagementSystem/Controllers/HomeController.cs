@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CreditCardManagementSystem.Models;
 
 namespace CreditCardManagementSystem.Controllers
 {
@@ -10,6 +11,7 @@ namespace CreditCardManagementSystem.Controllers
     {
         public ActionResult Index()
         {
+            CardInfo cardInfo = new CardInfo();
             return View();
         }
         [Authorize(Roles="admin")]

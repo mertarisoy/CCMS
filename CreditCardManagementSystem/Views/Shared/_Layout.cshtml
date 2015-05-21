@@ -20,37 +20,20 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    @{
-                        if (Roles.GetRolesForUser().Length > 0)
-                            {
-                                if(Roles.GetRolesForUser()[0] == "Admin")
-                                {
-                                    <li>@Html.ActionLink("Customer List", "Index", "Customer")</li>
-                                }
-                            }                        
-                    }
-                    <!-- <li>@Html.ActionLink("Contact", "Contact", "Home")</li> -->
-                    
+                              
                     @{
                         if(User.Identity.IsAuthenticated)
                         {
                             <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
                             <li>
-                                <strong style="color:white">@User.Identity.Name</strong> |
+                                <strong style="color:white">Hello, @User.Identity.Name</strong> 
                                 @{
                             if (Roles.GetRolesForUser().Length > 0)
                             {
-                                <strong style="color:white">@Roles.GetRolesForUser()[0]</strong>
+                                <strong style="color:white">| @Roles.GetRolesForUser()[0]</strong>
                             }
                                 }
                     </li>
-                        }
-                        else
-                        {
-                            <li>@Html.ActionLink("Login", "Login", "Account")</li>
-                            <li>@Html.ActionLink("Register", "Register", "Account")</li>
                         }
                     }
                 </ul>

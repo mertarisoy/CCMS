@@ -28,7 +28,10 @@ namespace CreditCardManagementSystem.Controllers
                     {
                         return Redirect(ReturnUrl);
                     }
-                    return RedirectToAction("Index", "Home");
+                    if (User.Identity.IsAuthenticated)
+                    {                       
+                        return RedirectToAction("Index", "Admin");                        
+                    }                                  
                 }
                 else
                 {
@@ -39,11 +42,13 @@ namespace CreditCardManagementSystem.Controllers
             ModelState.AddModelError("", "Username or Password is invalid.");
             return View(loginData);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult Register()
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Register(Register registerData , string role)
@@ -54,7 +59,7 @@ namespace CreditCardManagementSystem.Controllers
                 {
                     WebSecurity.CreateUserAndAccount(registerData.Username, registerData.Password);
                     Roles.AddUserToRole(registerData.Username, role);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Admin");
                 }
                 catch (MembershipCreateUserException)
                 {

@@ -3,21 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using CreditCardManagementSystem.Models;
+using WebMatrix.WebData;
+using System.Web.Security;
 
 namespace CreditCardManagementSystem.Controllers
 {
-    public class CustomerController : Controller
+    public class AdminController : Controller
     {
         //
-        // GET: /Customer/
-        [Authorize(Roles = "Customer")]
+        // GET: /Admin/
         public ActionResult Index()
         {
-            return View();
-        }
-        [Authorize(Roles = "Admin")]
-        public ActionResult CustomerList()
-        {
+            
             return View();
         }
 	}

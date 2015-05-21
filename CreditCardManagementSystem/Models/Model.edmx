@@ -5,29 +5,22 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="CCMSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Account">
+        <EntityType Name="AccountBalanceInfo">
           <Key>
             <PropertyRef Name="AccountID" />
           </Key>
           <Property Name="AccountID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CustomerID" Type="int" Nullable="false" />
-          <Property Name="AccountPassword" Type="char" MaxLength="10" Nullable="false" />
-          <Property Name="OpenDate" Type="date" Nullable="false" />
-          <Property Name="CloseDate" Type="date" />
-          <Property Name="InvoiceDate" Type="date" Nullable="false" />
           <Property Name="Balance" Type="decimal" Precision="5" Scale="2" Nullable="false" />
-          <Property Name="AccountStatus" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="CardInfo">
+        <EntityType Name="Bankomat">
           <Key>
             <PropertyRef Name="CardNumber" />
+            <PropertyRef Name="AccountID" />
           </Key>
           <Property Name="CardNumber" Type="char" MaxLength="16" Nullable="false" />
-          <Property Name="CardBalance" Type="decimal" Precision="5" Scale="2" Nullable="false" />
-          <Property Name="UsuableBalance" Type="decimal" Precision="5" Scale="2" Nullable="false" />
-          <Property Name="CardType" Type="bit" Nullable="false" />
+          <Property Name="AccountID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
-        <EntityType Name="CreditCard">
+        <EntityType Name="Cards">
           <Key>
             <PropertyRef Name="CardNumber" />
           </Key>
@@ -38,14 +31,23 @@
           <Property Name="ReleaseDate" Type="date" Nullable="false" />
           <Property Name="isActive" Type="bit" Nullable="false" />
           <Property Name="Pin" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="CardType" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="CreditCard_Customer">
+        <EntityType Name="Cards_Customer">
           <Key>
             <PropertyRef Name="CustomerID" />
             <PropertyRef Name="CardNumber" />
           </Key>
           <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CardNumber" Type="char" MaxLength="16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CreditCard">
+          <Key>
+            <PropertyRef Name="CardNumber" />
+          </Key>
+          <Property Name="CardNumber" Type="char" MaxLength="16" Nullable="false" />
+          <Property Name="CardLimit" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="usuableLimit" Type="decimal" Precision="5" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -63,13 +65,17 @@
           <Property Name="PhoneWork" Type="char" MaxLength="11" />
           <Property Name="isActive" Type="bit" Nullable="false" />
         </EntityType>
-        <EntityType Name="Installment">
+        <EntityType Name="CustomerAccount">
           <Key>
-            <PropertyRef Name="InstallmentID" />
+            <PropertyRef Name="AccountID" />
           </Key>
-          <Property Name="InstallmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NumberOfInstallment" Type="int" Nullable="false" />
-          <Property Name="StartingMonth" Type="int" Nullable="false" />
+          <Property Name="AccountID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="AccountPassword" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="OpenDate" Type="date" Nullable="false" />
+          <Property Name="CloseDate" Type="date" />
+          <Property Name="InvoiceDate" Type="date" Nullable="false" />
+          <Property Name="AccountStatus" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="TransactionInfo">
           <Key>
@@ -77,76 +83,101 @@
           </Key>
           <Property Name="TransactionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CardNumber" Type="char" MaxLength="16" />
-          <Property Name="InstallmentID" Type="int" />
           <Property Name="TransectionDescription" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="TransactionDate" Type="date" Nullable="false" />
           <Property Name="Amount" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="NumberOfInstallment" Type="int" Nullable="false" />
+          <Property Name="CurrentPaidAmount" Type="decimal" Precision="5" Scale="2" Nullable="false" />
         </EntityType>
         <Association Name="fkAccount">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
-          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <End Role="CustomerAccount" Type="Self.CustomerAccount" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
               <PropertyRef Name="CustomerID" />
             </Principal>
-            <Dependent Role="Account">
+            <Dependent Role="CustomerAccount">
               <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fkCardInfo">
-          <End Role="CreditCard" Type="Self.CreditCard" Multiplicity="1" />
-          <End Role="CardInfo" Type="Self.CardInfo" Multiplicity="0..1" />
+        <Association Name="fkAccountBalanceInfo">
+          <End Role="CustomerAccount" Type="Self.CustomerAccount" Multiplicity="1" />
+          <End Role="AccountBalanceInfo" Type="Self.AccountBalanceInfo" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="CreditCard">
+            <Principal Role="CustomerAccount">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="AccountBalanceInfo">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkBankomat_Account">
+          <End Role="CustomerAccount" Type="Self.CustomerAccount" Multiplicity="1" />
+          <End Role="Bankomat" Type="Self.Bankomat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerAccount">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="Bankomat">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkBankomat_Cards">
+          <End Role="Cards" Type="Self.Cards" Multiplicity="1" />
+          <End Role="Bankomat" Type="Self.Bankomat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cards">
               <PropertyRef Name="CardNumber" />
             </Principal>
-            <Dependent Role="CardInfo">
+            <Dependent Role="Bankomat">
               <PropertyRef Name="CardNumber" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fkCC_CardNumber">
-          <End Role="CreditCard" Type="Self.CreditCard" Multiplicity="1" />
-          <End Role="CreditCard_Customer" Type="Self.CreditCard_Customer" Multiplicity="*" />
+        <Association Name="fkCC_Cards">
+          <End Role="Cards" Type="Self.Cards" Multiplicity="1" />
+          <End Role="Cards_Customer" Type="Self.Cards_Customer" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CreditCard">
+            <Principal Role="Cards">
               <PropertyRef Name="CardNumber" />
             </Principal>
-            <Dependent Role="CreditCard_Customer">
+            <Dependent Role="Cards_Customer">
               <PropertyRef Name="CardNumber" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fkCC_CustomerID">
+        <Association Name="fkCC_Customer">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
-          <End Role="CreditCard_Customer" Type="Self.CreditCard_Customer" Multiplicity="*" />
+          <End Role="Cards_Customer" Type="Self.Cards_Customer" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
               <PropertyRef Name="CustomerID" />
             </Principal>
-            <Dependent Role="CreditCard_Customer">
+            <Dependent Role="Cards_Customer">
               <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fkInstallment">
-          <End Role="Installment" Type="Self.Installment" Multiplicity="0..1" />
-          <End Role="TransactionInfo" Type="Self.TransactionInfo" Multiplicity="*" />
+        <Association Name="fkCreditCard">
+          <End Role="Cards" Type="Self.Cards" Multiplicity="1" />
+          <End Role="CreditCard" Type="Self.CreditCard" Multiplicity="0..1" />
           <ReferentialConstraint>
-            <Principal Role="Installment">
-              <PropertyRef Name="InstallmentID" />
+            <Principal Role="Cards">
+              <PropertyRef Name="CardNumber" />
             </Principal>
-            <Dependent Role="TransactionInfo">
-              <PropertyRef Name="InstallmentID" />
+            <Dependent Role="CreditCard">
+              <PropertyRef Name="CardNumber" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fkTran_CardInfo">
-          <End Role="CreditCard" Type="Self.CreditCard" Multiplicity="0..1" />
+        <Association Name="fkTransactionInfo">
+          <End Role="Cards" Type="Self.Cards" Multiplicity="0..1" />
           <End Role="TransactionInfo" Type="Self.TransactionInfo" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="CreditCard">
+            <Principal Role="Cards">
               <PropertyRef Name="CardNumber" />
             </Principal>
             <Dependent Role="TransactionInfo">
@@ -155,35 +186,44 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="CCMSModelStoreContainer">
-          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CardInfo" EntityType="Self.CardInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccountBalanceInfo" EntityType="Self.AccountBalanceInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bankomat" EntityType="Self.Bankomat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cards" EntityType="Self.Cards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cards_Customer" EntityType="Self.Cards_Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CreditCard" EntityType="Self.CreditCard" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="CreditCard_Customer" EntityType="Self.CreditCard_Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Installment" EntityType="Self.Installment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerAccount" EntityType="Self.CustomerAccount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TransactionInfo" EntityType="Self.TransactionInfo" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="fkAccount" Association="Self.fkAccount">
             <End Role="Customer" EntitySet="Customer" />
-            <End Role="Account" EntitySet="Account" />
+            <End Role="CustomerAccount" EntitySet="CustomerAccount" />
           </AssociationSet>
-          <AssociationSet Name="fkCardInfo" Association="Self.fkCardInfo">
-            <End Role="CreditCard" EntitySet="CreditCard" />
-            <End Role="CardInfo" EntitySet="CardInfo" />
+          <AssociationSet Name="fkAccountBalanceInfo" Association="Self.fkAccountBalanceInfo">
+            <End Role="CustomerAccount" EntitySet="CustomerAccount" />
+            <End Role="AccountBalanceInfo" EntitySet="AccountBalanceInfo" />
           </AssociationSet>
-          <AssociationSet Name="fkCC_CardNumber" Association="Self.fkCC_CardNumber">
-            <End Role="CreditCard" EntitySet="CreditCard" />
-            <End Role="CreditCard_Customer" EntitySet="CreditCard_Customer" />
+          <AssociationSet Name="fkBankomat_Account" Association="Self.fkBankomat_Account">
+            <End Role="CustomerAccount" EntitySet="CustomerAccount" />
+            <End Role="Bankomat" EntitySet="Bankomat" />
           </AssociationSet>
-          <AssociationSet Name="fkCC_CustomerID" Association="Self.fkCC_CustomerID">
+          <AssociationSet Name="fkBankomat_Cards" Association="Self.fkBankomat_Cards">
+            <End Role="Cards" EntitySet="Cards" />
+            <End Role="Bankomat" EntitySet="Bankomat" />
+          </AssociationSet>
+          <AssociationSet Name="fkCC_Cards" Association="Self.fkCC_Cards">
+            <End Role="Cards" EntitySet="Cards" />
+            <End Role="Cards_Customer" EntitySet="Cards_Customer" />
+          </AssociationSet>
+          <AssociationSet Name="fkCC_Customer" Association="Self.fkCC_Customer">
             <End Role="Customer" EntitySet="Customer" />
-            <End Role="CreditCard_Customer" EntitySet="CreditCard_Customer" />
+            <End Role="Cards_Customer" EntitySet="Cards_Customer" />
           </AssociationSet>
-          <AssociationSet Name="fkInstallment" Association="Self.fkInstallment">
-            <End Role="Installment" EntitySet="Installment" />
-            <End Role="TransactionInfo" EntitySet="TransactionInfo" />
-          </AssociationSet>
-          <AssociationSet Name="fkTran_CardInfo" Association="Self.fkTran_CardInfo">
+          <AssociationSet Name="fkCreditCard" Association="Self.fkCreditCard">
+            <End Role="Cards" EntitySet="Cards" />
             <End Role="CreditCard" EntitySet="CreditCard" />
+          </AssociationSet>
+          <AssociationSet Name="fkTransactionInfo" Association="Self.fkTransactionInfo">
+            <End Role="Cards" EntitySet="Cards" />
             <End Role="TransactionInfo" EntitySet="TransactionInfo" />
           </AssociationSet>
         </EntityContainer>
@@ -192,31 +232,15 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CCMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Account">
+        <EntityType Name="AccountBalanceInfo">
           <Key>
             <PropertyRef Name="AccountID" />
           </Key>
           <Property Name="AccountID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerID" Type="Int32" Nullable="false" />
-          <Property Name="AccountPassword" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="OpenDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="CloseDate" Type="DateTime" Precision="0" />
-          <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Balance" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
-          <Property Name="AccountStatus" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Customer" Relationship="Self.fkAccount" FromRole="Account" ToRole="Customer" />
+          <NavigationProperty Name="CustomerAccount" Relationship="Self.fkAccountBalanceInfo" FromRole="AccountBalanceInfo" ToRole="CustomerAccount" />
         </EntityType>
-        <EntityType Name="CardInfo">
-          <Key>
-            <PropertyRef Name="CardNumber" />
-          </Key>
-          <Property Name="CardNumber" Type="String" MaxLength="16" FixedLength="true" Unicode="false" Nullable="false" />
-          <Property Name="CardBalance" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
-          <Property Name="UsuableBalance" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
-          <Property Name="CardType" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="CreditCard" Relationship="Self.fkCardInfo" FromRole="CardInfo" ToRole="CreditCard" />
-        </EntityType>
-        <EntityType Name="CreditCard">
+        <EntityType Name="Cards">
           <Key>
             <PropertyRef Name="CardNumber" />
           </Key>
@@ -227,9 +251,20 @@
           <Property Name="ReleaseDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="isActive" Type="Boolean" Nullable="false" />
           <Property Name="Pin" Type="String" MaxLength="4" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="CardInfo" Relationship="Self.fkCardInfo" FromRole="CreditCard" ToRole="CardInfo" />
-          <NavigationProperty Name="TransactionInfo" Relationship="Self.fkTran_CardInfo" FromRole="CreditCard" ToRole="TransactionInfo" />
-          <NavigationProperty Name="Customer" Relationship="Self.CreditCard_Customer" FromRole="CreditCard" ToRole="Customer" />
+          <Property Name="CardType" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="CreditCard" Relationship="Self.fkCreditCard" FromRole="Cards" ToRole="CreditCard" />
+          <NavigationProperty Name="TransactionInfo" Relationship="Self.fkTransactionInfo" FromRole="Cards" ToRole="TransactionInfo" />
+          <NavigationProperty Name="CustomerAccount" Relationship="Self.Bankomat" FromRole="Cards" ToRole="CustomerAccount" />
+          <NavigationProperty Name="Customer" Relationship="Self.Cards_Customer" FromRole="Cards" ToRole="Customer" />
+        </EntityType>
+        <EntityType Name="CreditCard">
+          <Key>
+            <PropertyRef Name="CardNumber" />
+          </Key>
+          <Property Name="CardNumber" Type="String" MaxLength="16" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="CardLimit" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="usuableLimit" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Cards" Relationship="Self.fkCreditCard" FromRole="CreditCard" ToRole="Cards" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -246,17 +281,23 @@
           <Property Name="PhoneHome" Type="String" MaxLength="11" FixedLength="true" Unicode="false" />
           <Property Name="PhoneWork" Type="String" MaxLength="11" FixedLength="true" Unicode="false" />
           <Property Name="isActive" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Account" Relationship="Self.fkAccount" FromRole="Customer" ToRole="Account" />
-          <NavigationProperty Name="CreditCard" Relationship="Self.CreditCard_Customer" FromRole="Customer" ToRole="CreditCard" />
+          <NavigationProperty Name="CustomerAccount" Relationship="Self.fkAccount" FromRole="Customer" ToRole="CustomerAccount" />
+          <NavigationProperty Name="Cards" Relationship="Self.Cards_Customer" FromRole="Customer" ToRole="Cards" />
         </EntityType>
-        <EntityType Name="Installment">
+        <EntityType Name="CustomerAccount">
           <Key>
-            <PropertyRef Name="InstallmentID" />
+            <PropertyRef Name="AccountID" />
           </Key>
-          <Property Name="InstallmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NumberOfInstallment" Type="Int32" Nullable="false" />
-          <Property Name="StartingMonth" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="TransactionInfo" Relationship="Self.fkInstallment" FromRole="Installment" ToRole="TransactionInfo" />
+          <Property Name="AccountID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="AccountPassword" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="OpenDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="CloseDate" Type="DateTime" Precision="0" />
+          <Property Name="InvoiceDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="AccountStatus" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="AccountBalanceInfo" Relationship="Self.fkAccountBalanceInfo" FromRole="CustomerAccount" ToRole="AccountBalanceInfo" />
+          <NavigationProperty Name="Customer" Relationship="Self.fkAccount" FromRole="CustomerAccount" ToRole="Customer" />
+          <NavigationProperty Name="Cards" Relationship="Self.Bankomat" FromRole="CustomerAccount" ToRole="Cards" />
         </EntityType>
         <EntityType Name="TransactionInfo">
           <Key>
@@ -264,90 +305,98 @@
           </Key>
           <Property Name="TransactionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CardNumber" Type="String" MaxLength="16" FixedLength="true" Unicode="false" />
-          <Property Name="InstallmentID" Type="Int32" />
           <Property Name="TransectionDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="TransactionDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="Amount" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
-          <NavigationProperty Name="CreditCard" Relationship="Self.fkTran_CardInfo" FromRole="TransactionInfo" ToRole="CreditCard" />
-          <NavigationProperty Name="Installment" Relationship="Self.fkInstallment" FromRole="TransactionInfo" ToRole="Installment" />
+          <Property Name="NumberOfInstallment" Type="Int32" Nullable="false" />
+          <Property Name="CurrentPaidAmount" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Cards" Relationship="Self.fkTransactionInfo" FromRole="TransactionInfo" ToRole="Cards" />
         </EntityType>
+        <Association Name="fkAccountBalanceInfo">
+          <End Role="CustomerAccount" Type="Self.CustomerAccount" Multiplicity="1" />
+          <End Role="AccountBalanceInfo" Type="Self.AccountBalanceInfo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerAccount">
+              <PropertyRef Name="AccountID" />
+            </Principal>
+            <Dependent Role="AccountBalanceInfo">
+              <PropertyRef Name="AccountID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkCreditCard">
+          <End Role="Cards" Type="Self.Cards" Multiplicity="1" />
+          <End Role="CreditCard" Type="Self.CreditCard" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Cards">
+              <PropertyRef Name="CardNumber" />
+            </Principal>
+            <Dependent Role="CreditCard">
+              <PropertyRef Name="CardNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkTransactionInfo">
+          <End Role="Cards" Type="Self.Cards" Multiplicity="0..1" />
+          <End Role="TransactionInfo" Type="Self.TransactionInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cards">
+              <PropertyRef Name="CardNumber" />
+            </Principal>
+            <Dependent Role="TransactionInfo">
+              <PropertyRef Name="CardNumber" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fkAccount">
           <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
-          <End Role="Account" Type="Self.Account" Multiplicity="*" />
+          <End Role="CustomerAccount" Type="Self.CustomerAccount" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Customer">
               <PropertyRef Name="CustomerID" />
             </Principal>
-            <Dependent Role="Account">
+            <Dependent Role="CustomerAccount">
               <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fkCardInfo">
-          <End Role="CreditCard" Type="Self.CreditCard" Multiplicity="1" />
-          <End Role="CardInfo" Type="Self.CardInfo" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="CreditCard">
-              <PropertyRef Name="CardNumber" />
-            </Principal>
-            <Dependent Role="CardInfo">
-              <PropertyRef Name="CardNumber" />
-            </Dependent>
-          </ReferentialConstraint>
+        <Association Name="Bankomat">
+          <End Role="CustomerAccount" Type="Self.CustomerAccount" Multiplicity="*" />
+          <End Role="Cards" Type="Self.Cards" Multiplicity="*" />
         </Association>
-        <Association Name="fkTran_CardInfo">
-          <End Role="CreditCard" Type="Self.CreditCard" Multiplicity="0..1" />
-          <End Role="TransactionInfo" Type="Self.TransactionInfo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CreditCard">
-              <PropertyRef Name="CardNumber" />
-            </Principal>
-            <Dependent Role="TransactionInfo">
-              <PropertyRef Name="CardNumber" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fkInstallment">
-          <End Role="Installment" Type="Self.Installment" Multiplicity="0..1" />
-          <End Role="TransactionInfo" Type="Self.TransactionInfo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Installment">
-              <PropertyRef Name="InstallmentID" />
-            </Principal>
-            <Dependent Role="TransactionInfo">
-              <PropertyRef Name="InstallmentID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="CreditCard_Customer">
-          <End Role="CreditCard" Type="Self.CreditCard" Multiplicity="*" />
+        <Association Name="Cards_Customer">
+          <End Role="Cards" Type="Self.Cards" Multiplicity="*" />
           <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="CCMSEntities1" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Account" EntityType="Self.Account" />
-          <EntitySet Name="CardInfo" EntityType="Self.CardInfo" />
+        <EntityContainer Name="CCMSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccountBalanceInfo" EntityType="Self.AccountBalanceInfo" />
+          <EntitySet Name="Cards" EntityType="Self.Cards" />
           <EntitySet Name="CreditCard" EntityType="Self.CreditCard" />
           <EntitySet Name="Customer" EntityType="Self.Customer" />
-          <EntitySet Name="Installment" EntityType="Self.Installment" />
+          <EntitySet Name="CustomerAccount" EntityType="Self.CustomerAccount" />
           <EntitySet Name="TransactionInfo" EntityType="Self.TransactionInfo" />
+          <AssociationSet Name="fkAccountBalanceInfo" Association="Self.fkAccountBalanceInfo">
+            <End Role="CustomerAccount" EntitySet="CustomerAccount" />
+            <End Role="AccountBalanceInfo" EntitySet="AccountBalanceInfo" />
+          </AssociationSet>
+          <AssociationSet Name="fkCreditCard" Association="Self.fkCreditCard">
+            <End Role="Cards" EntitySet="Cards" />
+            <End Role="CreditCard" EntitySet="CreditCard" />
+          </AssociationSet>
+          <AssociationSet Name="fkTransactionInfo" Association="Self.fkTransactionInfo">
+            <End Role="Cards" EntitySet="Cards" />
+            <End Role="TransactionInfo" EntitySet="TransactionInfo" />
+          </AssociationSet>
           <AssociationSet Name="fkAccount" Association="Self.fkAccount">
             <End Role="Customer" EntitySet="Customer" />
-            <End Role="Account" EntitySet="Account" />
+            <End Role="CustomerAccount" EntitySet="CustomerAccount" />
           </AssociationSet>
-          <AssociationSet Name="fkCardInfo" Association="Self.fkCardInfo">
-            <End Role="CreditCard" EntitySet="CreditCard" />
-            <End Role="CardInfo" EntitySet="CardInfo" />
+          <AssociationSet Name="Bankomat" Association="Self.Bankomat">
+            <End Role="CustomerAccount" EntitySet="CustomerAccount" />
+            <End Role="Cards" EntitySet="Cards" />
           </AssociationSet>
-          <AssociationSet Name="fkTran_CardInfo" Association="Self.fkTran_CardInfo">
-            <End Role="CreditCard" EntitySet="CreditCard" />
-            <End Role="TransactionInfo" EntitySet="TransactionInfo" />
-          </AssociationSet>
-          <AssociationSet Name="fkInstallment" Association="Self.fkInstallment">
-            <End Role="Installment" EntitySet="Installment" />
-            <End Role="TransactionInfo" EntitySet="TransactionInfo" />
-          </AssociationSet>
-          <AssociationSet Name="CreditCard_Customer" Association="Self.CreditCard_Customer">
-            <End Role="CreditCard" EntitySet="CreditCard" />
+          <AssociationSet Name="Cards_Customer" Association="Self.Cards_Customer">
+            <End Role="Cards" EntitySet="Cards" />
             <End Role="Customer" EntitySet="Customer" />
           </AssociationSet>
         </EntityContainer>
@@ -356,27 +405,25 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="CCMSModelStoreContainer" CdmEntityContainer="CCMSEntities1">
-          <EntitySetMapping Name="Account">
-            <EntityTypeMapping TypeName="CCMSModel.Account">
-              <MappingFragment StoreEntitySet="Account">
+        <EntityContainerMapping StorageEntityContainer="CCMSModelStoreContainer" CdmEntityContainer="CCMSEntities">
+          <EntitySetMapping Name="AccountBalanceInfo">
+            <EntityTypeMapping TypeName="CCMSModel.AccountBalanceInfo">
+              <MappingFragment StoreEntitySet="AccountBalanceInfo">
                 <ScalarProperty Name="AccountID" ColumnName="AccountID" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
-                <ScalarProperty Name="AccountPassword" ColumnName="AccountPassword" />
-                <ScalarProperty Name="OpenDate" ColumnName="OpenDate" />
-                <ScalarProperty Name="CloseDate" ColumnName="CloseDate" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
                 <ScalarProperty Name="Balance" ColumnName="Balance" />
-                <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CardInfo">
-            <EntityTypeMapping TypeName="CCMSModel.CardInfo">
-              <MappingFragment StoreEntitySet="CardInfo">
+          <EntitySetMapping Name="Cards">
+            <EntityTypeMapping TypeName="CCMSModel.Cards">
+              <MappingFragment StoreEntitySet="Cards">
                 <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
-                <ScalarProperty Name="CardBalance" ColumnName="CardBalance" />
-                <ScalarProperty Name="UsuableBalance" ColumnName="UsuableBalance" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="Cvc" ColumnName="Cvc" />
+                <ScalarProperty Name="CardName" ColumnName="CardName" />
+                <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
+                <ScalarProperty Name="isActive" ColumnName="isActive" />
+                <ScalarProperty Name="Pin" ColumnName="Pin" />
                 <ScalarProperty Name="CardType" ColumnName="CardType" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -385,12 +432,8 @@
             <EntityTypeMapping TypeName="CCMSModel.CreditCard">
               <MappingFragment StoreEntitySet="CreditCard">
                 <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
-                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
-                <ScalarProperty Name="Cvc" ColumnName="Cvc" />
-                <ScalarProperty Name="CardName" ColumnName="CardName" />
-                <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
-                <ScalarProperty Name="isActive" ColumnName="isActive" />
-                <ScalarProperty Name="Pin" ColumnName="Pin" />
+                <ScalarProperty Name="CardLimit" ColumnName="CardLimit" />
+                <ScalarProperty Name="usuableLimit" ColumnName="usuableLimit" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -411,12 +454,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Installment">
-            <EntityTypeMapping TypeName="CCMSModel.Installment">
-              <MappingFragment StoreEntitySet="Installment">
-                <ScalarProperty Name="InstallmentID" ColumnName="InstallmentID" />
-                <ScalarProperty Name="NumberOfInstallment" ColumnName="NumberOfInstallment" />
-                <ScalarProperty Name="StartingMonth" ColumnName="StartingMonth" />
+          <EntitySetMapping Name="CustomerAccount">
+            <EntityTypeMapping TypeName="CCMSModel.CustomerAccount">
+              <MappingFragment StoreEntitySet="CustomerAccount">
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="AccountPassword" ColumnName="AccountPassword" />
+                <ScalarProperty Name="OpenDate" ColumnName="OpenDate" />
+                <ScalarProperty Name="CloseDate" ColumnName="CloseDate" />
+                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+                <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -425,15 +472,24 @@
               <MappingFragment StoreEntitySet="TransactionInfo">
                 <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
                 <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
-                <ScalarProperty Name="InstallmentID" ColumnName="InstallmentID" />
                 <ScalarProperty Name="TransectionDescription" ColumnName="TransectionDescription" />
                 <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="NumberOfInstallment" ColumnName="NumberOfInstallment" />
+                <ScalarProperty Name="CurrentPaidAmount" ColumnName="CurrentPaidAmount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="CreditCard_Customer" TypeName="CCMSModel.CreditCard_Customer" StoreEntitySet="CreditCard_Customer">
-            <EndProperty Name="CreditCard">
+          <AssociationSetMapping Name="Bankomat" TypeName="CCMSModel.Bankomat" StoreEntitySet="Bankomat">
+            <EndProperty Name="CustomerAccount">
+              <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+            </EndProperty>
+            <EndProperty Name="Cards">
+              <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Cards_Customer" TypeName="CCMSModel.Cards_Customer" StoreEntitySet="Cards_Customer">
+            <EndProperty Name="Cards">
               <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
             </EndProperty>
             <EndProperty Name="Customer">

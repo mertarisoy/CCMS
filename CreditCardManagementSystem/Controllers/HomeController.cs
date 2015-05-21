@@ -11,7 +11,6 @@ namespace CreditCardManagementSystem.Controllers
     {
         public ActionResult Index()
         {
-            CardInfo cardInfo = new CardInfo();
             return View();
         }
         [Authorize(Roles="admin")]

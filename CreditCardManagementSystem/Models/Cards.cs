@@ -12,27 +12,27 @@ namespace CreditCardManagementSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Customer
+    public partial class Cards
     {
-        public Customer()
+        public Cards()
         {
+            this.TransactionInfo = new HashSet<TransactionInfo>();
             this.CustomerAccount = new HashSet<CustomerAccount>();
-            this.Cards = new HashSet<Cards>();
+            this.Customer = new HashSet<Customer>();
         }
     
-        public int CustomerID { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerSurname { get; set; }
-        public string Email { get; set; }
-        public System.DateTime DateOfBirth { get; set; }
-        public string Address1 { get; set; }
-        public string Address2 { get; set; }
-        public string PhoneCell { get; set; }
-        public string PhoneHome { get; set; }
-        public string PhoneWork { get; set; }
+        public string CardNumber { get; set; }
+        public System.DateTime ExpirationDate { get; set; }
+        public string Cvc { get; set; }
+        public string CardName { get; set; }
+        public System.DateTime ReleaseDate { get; set; }
         public bool isActive { get; set; }
+        public string Pin { get; set; }
+        public bool CardType { get; set; }
     
+        public virtual CreditCard CreditCard { get; set; }
+        public virtual ICollection<TransactionInfo> TransactionInfo { get; set; }
         public virtual ICollection<CustomerAccount> CustomerAccount { get; set; }
-        public virtual ICollection<Cards> Cards { get; set; }
+        public virtual ICollection<Customer> Customer { get; set; }
     }
 }

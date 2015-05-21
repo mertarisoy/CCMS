@@ -14,22 +14,10 @@ namespace CreditCardManagementSystem.Models
     
     public partial class CreditCard
     {
-        public CreditCard()
-        {
-            this.TransactionInfo = new HashSet<TransactionInfo>();
-            this.Customer = new HashSet<Customer>();
-        }
-    
         public string CardNumber { get; set; }
-        public System.DateTime ExpirationDate { get; set; }
-        public string Cvc { get; set; }
-        public string CardName { get; set; }
-        public System.DateTime ReleaseDate { get; set; }
-        public bool isActive { get; set; }
-        public string Pin { get; set; }
+        public decimal CardLimit { get; set; }
+        public decimal usuableLimit { get; set; }
     
-        public virtual CardInfo CardInfo { get; set; }
-        public virtual ICollection<TransactionInfo> TransactionInfo { get; set; }
-        public virtual ICollection<Customer> Customer { get; set; }
+        public virtual Cards Cards { get; set; }
     }
 }

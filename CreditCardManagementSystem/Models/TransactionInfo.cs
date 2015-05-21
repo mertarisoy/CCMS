@@ -16,12 +16,12 @@ namespace CreditCardManagementSystem.Models
     {
         public int TransactionID { get; set; }
         public string CardNumber { get; set; }
-        public Nullable<int> InstallmentID { get; set; }
         public string TransectionDescription { get; set; }
         public System.DateTime TransactionDate { get; set; }
         public decimal Amount { get; set; }
+        public int NumberOfInstallment { get; set; }
+        public decimal CurrentPaidAmount { get; set; }
     
-        public virtual CreditCard CreditCard { get; set; }
-        public virtual Installment Installment { get; set; }
+        public virtual Cards Cards { get; set; }
     }
 }

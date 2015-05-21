@@ -12,17 +12,11 @@ namespace CreditCardManagementSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Installment
+    public partial class AccountBalanceInfo
     {
-        public Installment()
-        {
-            this.TransactionInfo = new HashSet<TransactionInfo>();
-        }
+        public int AccountID { get; set; }
+        public decimal Balance { get; set; }
     
-        public int InstallmentID { get; set; }
-        public int NumberOfInstallment { get; set; }
-        public int StartingMonth { get; set; }
-    
-        public virtual ICollection<TransactionInfo> TransactionInfo { get; set; }
+        public virtual CustomerAccount CustomerAccount { get; set; }
     }
 }

@@ -12,17 +12,23 @@ namespace CreditCardManagementSystem.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Account
+    public partial class CustomerAccount
     {
+        public CustomerAccount()
+        {
+            this.Cards = new HashSet<Cards>();
+        }
+    
         public int AccountID { get; set; }
         public int CustomerID { get; set; }
         public string AccountPassword { get; set; }
         public System.DateTime OpenDate { get; set; }
         public Nullable<System.DateTime> CloseDate { get; set; }
         public System.DateTime InvoiceDate { get; set; }
-        public decimal Balance { get; set; }
         public bool AccountStatus { get; set; }
     
+        public virtual AccountBalanceInfo AccountBalanceInfo { get; set; }
         public virtual Customer Customer { get; set; }
+        public virtual ICollection<Cards> Cards { get; set; }
     }
 }

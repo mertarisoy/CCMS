@@ -13,10 +13,10 @@ namespace CreditCardManagementSystem.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class CCMSEntities1 : DbContext
+    public partial class CCMSEntities : DbContext
     {
-        public CCMSEntities1()
-            : base("name=CCMSEntities1")
+        public CCMSEntities()
+            : base("name=CCMSEntities")
         {
         }
     
@@ -25,11 +25,11 @@ namespace CreditCardManagementSystem.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<Account> Account { get; set; }
-        public DbSet<CardInfo> CardInfo { get; set; }
+        public DbSet<AccountBalanceInfo> AccountBalanceInfo { get; set; }
+        public DbSet<Cards> Cards { get; set; }
         public DbSet<CreditCard> CreditCard { get; set; }
         public DbSet<Customer> Customer { get; set; }
-        public DbSet<Installment> Installment { get; set; }
+        public DbSet<CustomerAccount> CustomerAccount { get; set; }
         public DbSet<TransactionInfo> TransactionInfo { get; set; }
     }
 }

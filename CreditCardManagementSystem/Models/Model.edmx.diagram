@@ -4,18 +4,19 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="2fddec216ec147ce8f2dd6cad1af58a0" Name="Diagram1">
-        <EntityTypeShape EntityType="CCMSModel.Account" Width="1.5" PointX="5.25" PointY="6.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CCMSModel.CardInfo" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CCMSModel.CreditCard" Width="1.5" PointX="0.5" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CCMSModel.Customer" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CCMSModel.Installment" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CCMSModel.TransactionInfo" Width="1.5" PointX="6" PointY="2.375" IsExpanded="true" />
+      <Diagram DiagramId="58423d03419f4ea5a2852610a3fa7579" Name="Diagram1">
+        <EntityTypeShape EntityType="CCMSModel.AccountBalanceInfo" Width="1.5" PointX="7.5" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CCMSModel.Cards" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CCMSModel.CreditCard" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CCMSModel.Customer" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CCMSModel.CustomerAccount" Width="1.5" PointX="5.25" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CCMSModel.TransactionInfo" Width="1.5" PointX="3" PointY="8.125" IsExpanded="true" />
+        <AssociationConnector Association="CCMSModel.fkAccountBalanceInfo" ManuallyRouted="false" />
+        <AssociationConnector Association="CCMSModel.fkCreditCard" ManuallyRouted="false" />
+        <AssociationConnector Association="CCMSModel.fkTransactionInfo" ManuallyRouted="false" />
         <AssociationConnector Association="CCMSModel.fkAccount" ManuallyRouted="false" />
-        <AssociationConnector Association="CCMSModel.fkCardInfo" ManuallyRouted="false" />
-        <AssociationConnector Association="CCMSModel.fkTran_CardInfo" ManuallyRouted="false" />
-        <AssociationConnector Association="CCMSModel.fkInstallment" ManuallyRouted="false" />
-        <AssociationConnector Association="CCMSModel.CreditCard_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="CCMSModel.Bankomat" ManuallyRouted="false" />
+        <AssociationConnector Association="CCMSModel.Cards_Customer" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

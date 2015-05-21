@@ -13,7 +13,7 @@ namespace CreditCardManagementSystem.Controllers
         {
             return View();
         }
-        [Authorize(Roles="admin")]
+        [Authorize(Roles="Admin")]
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

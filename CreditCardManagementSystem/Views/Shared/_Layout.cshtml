@@ -16,12 +16,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("CCMS", "Index", "Home", null, new { @class = "navbar-brand" })
+                @Html.ActionLink("Credit Card Management System", "Index", "Home", null, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
+                    @{
+                        if (Roles.GetRolesForUser().Length > 0)
+                            {
+                                if(Roles.GetRolesForUser()[0] == "Admin")
+                                {
+                                    <li>@Html.ActionLink("Customer List", "Index", "Customer")</li>
+                                }
+                            }                        
+                    }
                     <!-- <li>@Html.ActionLink("Contact", "Contact", "Home")</li> -->
                     
                     @{
@@ -52,7 +61,8 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>110301034 - Utku Can Gürses</p>
+            <p>110301035 - Mert Arısoy</p>
         </footer>
     </div>
 

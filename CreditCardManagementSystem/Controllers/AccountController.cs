@@ -28,10 +28,7 @@ namespace CreditCardManagementSystem.Controllers
                     {
                         return Redirect(ReturnUrl);
                     }
-                    if (User.Identity.IsAuthenticated)
-                    {                       
-                        return RedirectToAction("Index", "Admin");                        
-                    }                                  
+                    return RedirectToAction("Index", "Admin");                                 
                 }
                 else
                 {

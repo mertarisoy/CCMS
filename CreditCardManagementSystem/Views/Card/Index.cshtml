@@ -1,75 +1,13 @@
-﻿@model IEnumerable<CreditCardManagementSystem.Models.Cards>
-
+﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Index1";
 }
 
-<h2>Index</h2>
+<h2>Index1</h2>
+<div>
+    <form method="get">
+        <input type="submit" value="Credit Card" />
+        <input type="submit" value="Bankomat" />
+    </form>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ExpirationDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Cvc)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CardName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReleaseDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.isActive)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Pin)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CardType)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CreditCard.CardNumber)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ExpirationDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cvc)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CardName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReleaseDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.isActive)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Pin)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CardType)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreditCard.CardNumber)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CardNumber }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CardNumber }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CardNumber })
-        </td>
-    </tr>
-}
-
-</table>

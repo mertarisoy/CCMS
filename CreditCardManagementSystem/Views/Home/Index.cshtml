@@ -6,11 +6,13 @@
     <h1>CEN336 Term Project</h1>
     <p class="lead">Topic is to degisn Credit Card Management System.</p>
 </div>
-
+@if (!User.Identity.IsAuthenticated) {
 <div class="row">
     <h2>Login</h2>
     <p>
         Please login first.
     </p>
+   
     <p><a class="btn btn-default" href="http://localhost:4897/Account/Login">Login &raquo;</a></p>
 </div>
+     }

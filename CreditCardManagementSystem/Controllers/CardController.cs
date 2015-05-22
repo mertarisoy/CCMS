@@ -17,8 +17,9 @@ namespace CreditCardManagementSystem.Controllers
         // GET: /Card/
         public ActionResult Index()
         {
-            var cards = db.Cards.Include(c => c.CreditCard);
-            return View(cards.ToList());
+            //var cards = db.Cards.Include(c => c.CreditCard);
+            //return View(cards.ToList());
+            return View();
         }
 
         // GET: /Card/Details/5
@@ -124,6 +125,7 @@ namespace CreditCardManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
+ 
         protected override void Dispose(bool disposing)
         {
             if (disposing)

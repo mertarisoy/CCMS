@@ -46,8 +46,9 @@ namespace CreditCardManagementSystem.Controllers
                         {
                             var id = ctx.UserProfile.SqlQuery("Select * FROM UserProfile WHERE Username='"+loginData.Username+"'").FirstOrDefault<UserProfile>();
                             ss = id.UserID.ToString();
-                        } 
-                  
+                        }
+
+                        Session["userID"] = ss;
                         return RedirectToAction("Details", "Customer", new { id = ss });
                     }
                     

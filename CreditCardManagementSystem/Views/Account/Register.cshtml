@@ -29,12 +29,30 @@
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
-        <label>Enter Username</label>
+        <label>Username</label>
         @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
-        <label>Enter Password</label>
+        <label>Password</label>
         @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        <label>Name</label>
+        @Html.TextBoxFor(m => m.CustomerName, new { @class = "form-control" })
+        <label>Surname</label>
+        @Html.TextBoxFor(m => m.CustomerSurname, new { @class = "form-control" })
+        <label>Email</label>
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        <label>Address 1</label>
+        @Html.TextBoxFor(m => m.Address1, new { @class = "form-control" })
+        <label>Address 2</label>
+        @Html.TextBoxFor(m => m.Address2, new { @class = "form-control" })
+        <label>Cell Phone</label>
+        @Html.TextBoxFor(m => m.PhoneCell, new { @class = "form-control" })
+        <label>Home Phone</label>
+        @Html.TextBoxFor(m => m.PhoneHome, new { @class = "form-control" })
+        <label>Work Phone</label>
+        @Html.TextBoxFor(m => m.PhoneWork, new { @class = "form-control" })
+        
         <label>Role</label>
         @Html.DropDownList("role",roles, "select a role");
+        
         
         <button class="btn btn-primary">Create</button>
     }

@@ -4,19 +4,24 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="58423d03419f4ea5a2852610a3fa7579" Name="Diagram1">
+      <Diagram DiagramId="417ec83641ca41babf31e67aea225652" Name="Diagram1">
         <EntityTypeShape EntityType="CCMSModel.AccountBalanceInfo" Width="1.5" PointX="7.5" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CCMSModel.Cards" Width="1.5" PointX="0.75" PointY="4.25" IsExpanded="true" />
         <EntityTypeShape EntityType="CCMSModel.CreditCard" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="CCMSModel.Customer" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="CCMSModel.CustomerAccount" Width="1.5" PointX="5.25" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CCMSModel.TransactionInfo" Width="1.5" PointX="3" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CCMSModel.UserProfile" Width="1.5" PointX="8" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CCMSModel.webpages_Membership" Width="1.5" PointX="7.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CCMSModel.webpages_OAuthMembership" Width="1.5" PointX="9.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CCMSModel.webpages_Roles" Width="1.5" PointX="5.75" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="CCMSModel.fkAccountBalanceInfo" ManuallyRouted="false" />
         <AssociationConnector Association="CCMSModel.fkCreditCard" ManuallyRouted="false" />
         <AssociationConnector Association="CCMSModel.fkTransactionInfo" ManuallyRouted="false" />
         <AssociationConnector Association="CCMSModel.fkAccount" ManuallyRouted="false" />
         <AssociationConnector Association="CCMSModel.Bankomat" ManuallyRouted="false" />
         <AssociationConnector Association="CCMSModel.Cards_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="CCMSModel.webpages_UsersInRoles" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

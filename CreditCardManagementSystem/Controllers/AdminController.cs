@@ -15,8 +15,7 @@ namespace CreditCardManagementSystem.Controllers
         // GET: /Admin/
         public ActionResult Index()
         {
-            
-            return View();
+            return RedirectToAction("Index", "Customer");
         }
 	}
 }

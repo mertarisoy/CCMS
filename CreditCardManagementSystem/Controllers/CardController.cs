@@ -7,111 +7,119 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CreditCardManagementSystem.Models;
-using System.Web.Security;
 
 namespace CreditCardManagementSystem.Controllers
 {
-    public class CustomerController : Controller
+    public class CardController : Controller
     {
         private CCMSEntities db = new CCMSEntities();
 
-        // GET: /Customer/
+        // GET: /Card/
         public ActionResult Index()
         {
-            return View(db.Customer.ToList());
+            var cards = db.Cards.Include(c => c.CreditCard);
+            return View(cards.ToList());
         }
 
-        // GET: /Customer/Details/5
-        public ActionResult Details(int? id)
+        // GET: /Card/Details/5
+        public ActionResult Details(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customer.Find(id);
-            if (customer == null)
+            Cards cards = db.Cards.Find(id);
+            if (cards == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            return View(cards);
         }
 
-        // GET: /Customer/Create
+        // GET: /Card/Create
         public ActionResult Create()
         {
+            ViewBag.CardNumber = new SelectList(db.CreditCard, "CardNumber", "CardNumber");
             return View();
         }
 
-        // POST: /Customer/Create
+        // POST: /Card/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="CustomerID,CustomerName,CustomerSurname,Email,DateOfBirth,Address1,Address2,PhoneCell,PhoneHome,PhoneWork,isActive")] Customer customer)
+        public ActionResult Create([Bind(Include="CardNumber,ExpirationDate,Cvc,CardName,ReleaseDate,isActive,Pin,CardType")] Cards cards)
         {
             if (ModelState.IsValid)
             {
-                db.Customer.Add(customer);
+                db.Cards.Add(cards);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(customer);
+            ViewBag.CardNumber = new SelectList(db.CreditCard, "CardNumber", "CardNumber", cards.CardNumber);
+            return View(cards);
         }
 
-        // GET: /Customer/Edit/5
-        public ActionResult Edit(int? id)
+        // GET: /Card/Edit/5
+        public ActionResult Edit(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customer.Find(id);
-            if (customer == null)
+            Cards cards = db.Cards.Find(id);
+            if (cards == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            ViewBag.CardNumber = new SelectList(db.CreditCard, "CardNumber", "CardNumber", cards.CardNumber);
+            return View(cards);
         }
 
-        // POST: /Customer/Edit/5
+        // POST: /Card/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="CustomerID,CustomerName,CustomerSurname,Email,DateOfBirth,Address1,Address2,PhoneCell,PhoneHome,PhoneWork,isActive")] Customer customer)
+        public ActionResult Edit([Bind(Include="CardNumber,ExpirationDate,Cvc,CardName,ReleaseDate,isActive,Pin,CardType")] Cards cards)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(customer).State = EntityState.Modified;
+                db.Entry(cards).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(customer);
+            ViewBag.CardNumber = new SelectList(db.CreditCard, "CardNumber", "CardNumber", cards.CardNumber);
+            return View(cards);
         }
 
-        // GET: /Customer/Delete/5
-        public ActionResult Delete(int? id)
+        // GET: /Card/Delete/5
+        public ActionResult Delete(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customer.Find(id);
-            if (customer == null)
+            Cards cards = db.Cards.Find(id);
+            if (cards == null)
             {
                 return HttpNotFound();
             }
-            return View(customer);
+            return View(cards);
         }
-
-        // POST: /Customer/Delete/5
+        public ActionResult CardGenerator()
+        {
+            NumberGenerator numgen = NumberGenerator.getInstance();
+            return Content(numgen.generate());
+        }
+        // POST: /Card/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(string id)
         {
-            Customer customer = db.Customer.Find(id);
-            db.Customer.Remove(customer);
+            Cards cards = db.Cards.Find(id);
+            db.Cards.Remove(cards);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -124,5 +132,6 @@ namespace CreditCardManagementSystem.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }

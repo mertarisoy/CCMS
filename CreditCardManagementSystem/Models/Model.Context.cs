@@ -31,5 +31,9 @@ namespace CreditCardManagementSystem.Models
         public DbSet<Customer> Customer { get; set; }
         public DbSet<CustomerAccount> CustomerAccount { get; set; }
         public DbSet<TransactionInfo> TransactionInfo { get; set; }
+        public DbSet<UserProfile> UserProfile { get; set; }
+        public DbSet<webpages_Membership> webpages_Membership { get; set; }
+        public DbSet<webpages_OAuthMembership> webpages_OAuthMembership { get; set; }
+        public DbSet<webpages_Roles> webpages_Roles { get; set; }
     }
 }

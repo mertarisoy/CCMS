@@ -6,11 +6,15 @@ using System.Web.Mvc;
 using CreditCardManagementSystem.Models;
 using WebMatrix.WebData;
 using System.Web.Security;
+using Microsoft.AspNet.Identity;
+
 
 namespace CreditCardManagementSystem.Controllers
 {
     public class AccountController : Controller
     {
+
+        CCMSEntities db = new CCMSEntities();
         [HttpGet]
         public ActionResult Login()
         {
@@ -28,7 +32,26 @@ namespace CreditCardManagementSystem.Controllers
                     {
                         return Redirect(ReturnUrl);
                     }
-                    return RedirectToAction("Index", "Admin");                                 
+
+                    if (Roles.GetRolesForUser(loginData.Username)[0] == "Admin")
+                    {
+                        return RedirectToAction("Index", "Admin"); 
+                    }
+                    else
+                    {
+                        string ss = "";
+
+
+                        using (var ctx = db)
+                        {
+                            var id = ctx.UserProfile.SqlQuery("Select * FROM UserProfile WHERE Username='"+loginData.Username+"'").FirstOrDefault<UserProfile>();
+                            ss = id.UserID.ToString();
+                        } 
+                  
+                        return RedirectToAction("Details", "Customer", new { id = ss });
+                    }
+                    
+                              
                 }
                 else
                 {
@@ -39,13 +62,12 @@ namespace CreditCardManagementSystem.Controllers
             ModelState.AddModelError("", "Username or Password is invalid.");
             return View(loginData);
         }
-        [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult Register()
         {
             return View();
         }
-        [Authorize(Roles = "Admin")]
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Register(Register registerData , string role)
@@ -56,6 +78,9 @@ namespace CreditCardManagementSystem.Controllers
                 {
                     WebSecurity.CreateUserAndAccount(registerData.Username, registerData.Password);
                     Roles.AddUserToRole(registerData.Username, role);
+                    CCMSEntities db = new CCMSEntities();
+                    db.Customer.Add(registerData.toCustomerObject());
+                    db.SaveChanges();
                     return RedirectToAction("Index", "Admin");
                 }
                 catch (MembershipCreateUserException)

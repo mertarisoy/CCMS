@@ -1,0 +1,82 @@
+﻿@model CreditCardManagementSystem.Models.Cards
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Cards</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ExpirationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ExpirationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cvc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cvc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CardName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CardName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReleaseDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReleaseDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.isActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.isActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pin)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CardType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CardType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreditCard.CardNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreditCard.CardNumber)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.CardNumber }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

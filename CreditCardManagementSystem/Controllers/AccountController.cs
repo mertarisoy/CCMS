@@ -82,7 +82,24 @@ namespace CreditCardManagementSystem.Controllers
                     CCMSEntities db = new CCMSEntities();
                     db.Customer.Add(registerData.toCustomerObject());
                     db.SaveChanges();
-                    return RedirectToAction("Index", "Admin");
+                    if (Roles.GetRolesForUser(registerData.Username)[0] == "Admin")
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else
+                    {
+                        string ss = "";
+
+
+                        using (var ctx = db)
+                        {
+                            var id = ctx.UserProfile.SqlQuery("Select * FROM UserProfile WHERE Username='" + registerData.Username + "'").FirstOrDefault<UserProfile>();
+                            ss = id.UserID.ToString();
+                        }
+
+                        Session["userID"] = ss;
+                        return RedirectToAction("Details", "Customer", new { id = ss });
+                    }
                 }
                 catch (MembershipCreateUserException)
                 {

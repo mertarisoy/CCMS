@@ -8,10 +8,10 @@
 
 <div>
     <h4>Customer</h4>
-	<hr />
+    <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.CustomerName)
+            Name
         </dt>
 
         <dd>
@@ -19,7 +19,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CustomerSurname)
+            Surname
         </dt>
 
         <dd>
@@ -27,7 +27,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            Email
         </dt>
 
         <dd>
@@ -35,7 +35,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            Birth
         </dt>
 
         <dd>
@@ -43,7 +43,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Address1)
+            Address 1
         </dt>
 
         <dd>
@@ -51,7 +51,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Address2)
+            Address 2
         </dt>
 
         <dd>
@@ -59,7 +59,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PhoneCell)
+            Cell Phone
         </dt>
 
         <dd>
@@ -67,7 +67,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PhoneHome)
+            Mobile Phone
         </dt>
 
         <dd>
@@ -75,25 +75,31 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.PhoneWork)
+            Work Phone
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.PhoneWork)
         </dd>
+        @if (Roles.GetRolesForUser()[0] == "Admin")
+        {
+            <dt>
+                Active
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.isActive)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.isActive)
-        </dd>
-
+            <dd>
+                @Html.DisplayFor(model => model.isActive)
+            </dd>
+        }
     </dl>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.CustomerID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @{if (Roles.GetRolesForUser()[0] == "Admin")
+    {
+        @Html.ActionLink("Back to List", "Index")
+    }
+    } |
     @Html.ActionLink("My Cards", "Index", "Card");
+
 </p>

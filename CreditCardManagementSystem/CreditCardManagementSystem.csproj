@@ -253,8 +253,8 @@
     <Content Include="Views\Card\Delete.cshtml" />
     <Content Include="Views\Card\Details.cshtml" />
     <Content Include="Views\Card\Edit.cshtml" />
-    <Content Include="Views\Card\Index2.cshtml" />
     <Content Include="Views\Card\Index.cshtml" />
+    <Content Include="Views\Card\CardList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

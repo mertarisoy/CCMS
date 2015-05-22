@@ -17,11 +17,15 @@ namespace CreditCardManagementSystem.Controllers
         // GET: /Card/
         public ActionResult Index()
         {
-            //var cards = db.Cards.Include(c => c.CreditCard);
-            //return View(cards.ToList());
+
             return View();
         }
 
+        public ActionResult CardList()
+        {
+            var cards = db.Cards.Include(c => c.CreditCard);
+            return View(cards.ToList());
+        }
         // GET: /Card/Details/5
         public ActionResult Details(string id)
         {
@@ -49,7 +53,7 @@ namespace CreditCardManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="CardNumber,ExpirationDate,Cvc,CardName,ReleaseDate,isActive,Pin,CardType")] Cards cards)
+        public ActionResult Create([Bind(Include = "CardNumber,ExpirationDate,Cvc,CardName,ReleaseDate,isActive,Pin,CardType")] Cards cards)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +87,7 @@ namespace CreditCardManagementSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="CardNumber,ExpirationDate,Cvc,CardName,ReleaseDate,isActive,Pin,CardType")] Cards cards)
+        public ActionResult Edit([Bind(Include = "CardNumber,ExpirationDate,Cvc,CardName,ReleaseDate,isActive,Pin,CardType")] Cards cards)
         {
             if (ModelState.IsValid)
             {
@@ -125,7 +129,7 @@ namespace CreditCardManagementSystem.Controllers
             return RedirectToAction("Index");
         }
 
- 
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -23,6 +23,17 @@
                     @{
                         if (User.Identity.IsAuthenticated)
                         {
+                            if (Roles.GetRolesForUser()[0] == "Admin")
+                            {
+                                <li>@Html.ActionLink("Customers", "Index", "Customer")</li>
+                                <li>@Html.ActionLink("Cards", "CardList", "Card")</li>
+                            }
+                            else
+                            {
+                                <li>@Html.ActionLink("Info", "Details", "Customer", new { id = Session["userID"] }, new { })</li>
+                                <li>@Html.ActionLink("My Cards", "Index", "Card")</li>
+                            }
+
                             <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
                             <li>
                                 <strong style="color:white">Hello, @User.Identity.Name</strong>
@@ -40,8 +51,8 @@
                             <li>@Html.ActionLink("Register", "Register", "Account")</li>
                         }
                     }
-                              
-                 
+
+
                 </ul>
             </div>
         </div>

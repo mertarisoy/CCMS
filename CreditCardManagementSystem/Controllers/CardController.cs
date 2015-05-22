@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CreditCardManagementSystem.Models;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 
 namespace CreditCardManagementSystem.Controllers
 {
@@ -42,9 +44,33 @@ namespace CreditCardManagementSystem.Controllers
         }
 
         // GET: /Card/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
-            ViewBag.CardNumber = new SelectList(db.CreditCard, "CardNumber", "CardNumber");
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            CCMSEntities db = new CCMSEntities();
+            String fullname = "";
+            using (var ctx = db)
+            {
+                var t = ctx.Customer.SqlQuery("Select * FROM Customer WHERE CustomerID='" +id+"'").FirstOrDefault<Customer>();
+                fullname = t.CustomerName + " " + t.CustomerSurname;
+            }
+
+            ViewBag.exprDate = DateTime.Today.Month + "/" + (DateTime.Today.Year + 5);
+            ViewBag.date = DateTime.Today.Month + "/" + DateTime.Today.Year;
+
+            ViewBag.fullName = fullname;
+            NumberGenerator numgen = NumberGenerator.getInstance();
+            String cardNumber = numgen.generate();
+            Random rnd = new Random();
+            int cvc = rnd.Next(100, 1000);
+
+            ViewBag.CVC = cvc;
+            ViewBag.cardNumber = cardNumber;
+            //ViewBag.CardNumber = new SelectList(db.CreditCard, "CardNumber", "CardNumber");
             return View();
         }
 
@@ -55,11 +81,28 @@ namespace CreditCardManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CardNumber,ExpirationDate,Cvc,CardName,ReleaseDate,isActive,Pin,CardType")] Cards cards)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Cards.Add(cards);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+
+                if (ModelState.IsValid)
+                {
+                    db.Cards.Add(cards);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                    }
+                }
+            
+            
             }
 
             ViewBag.CardNumber = new SelectList(db.CreditCard, "CardNumber", "CardNumber", cards.CardNumber);

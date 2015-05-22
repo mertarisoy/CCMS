@@ -23,10 +23,10 @@ namespace CreditCardManagementSystem.Models
         public String generate()
         {
             Random rnd = new Random();
-            string cardnumber = "";
-            for (int i = 0; i < 16; i++)
+            string cardnumber = Convert.ToString(rnd.Next(1000, 10000));
+            for (int i = 0; i < 3; i++)
             {
-                cardnumber += Convert.ToString(rnd.Next(0, 10));
+                cardnumber = cardnumber +" "+  Convert.ToString(rnd.Next(1000, 10000));
             }
             return cardnumber;
         }

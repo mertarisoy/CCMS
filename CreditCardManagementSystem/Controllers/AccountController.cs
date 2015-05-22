@@ -28,29 +28,31 @@ namespace CreditCardManagementSystem.Controllers
             {
                 if(WebSecurity.Login(loginData.Username, loginData.Password))
                 {
+                    string userID;
+                    using (var ctx = db)
+                    {
+                        var id = ctx.UserProfile.SqlQuery("Select * FROM UserProfile WHERE Username='" + loginData.Username + "'").FirstOrDefault<UserProfile>();
+                        userID = id.UserID.ToString();
+                    }
+
+                    Session["userID"] = userID;
+
                     if (ReturnUrl != null)
                     {
                         return Redirect(ReturnUrl);
                     }
 
+                   
                     if (Roles.GetRolesForUser(loginData.Username)[0] == "Admin")
                     {
-                        return RedirectToAction("Index", "Admin"); 
+                        
+                        return RedirectToAction("Index", "Admin");
                     }
                     else
                     {
-                        string ss = "";
-
-
-                        using (var ctx = db)
-                        {
-                            var id = ctx.UserProfile.SqlQuery("Select * FROM UserProfile WHERE Username='"+loginData.Username+"'").FirstOrDefault<UserProfile>();
-                            ss = id.UserID.ToString();
-                        }
-
-                        Session["userID"] = ss;
-                        return RedirectToAction("Details", "Customer", new { id = ss });
+                        return RedirectToAction("Details", "Customer", new { id = userID });
                     }
+                    
                     
                               
                 }

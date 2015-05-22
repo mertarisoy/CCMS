@@ -16,6 +16,7 @@ namespace CreditCardManagementSystem.Controllers
         private CCMSEntities db = new CCMSEntities();
 
         // GET: /Customer/
+        [Authorize(Roles="Admin")]
         public ActionResult Index()
         {
             return View(db.Customer.ToList());

@@ -145,7 +145,6 @@
     <Compile Include="Models\AccountBalanceInfo.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\NumberGenerator.cs" />
     <Compile Include="Models\Cards.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
@@ -174,6 +173,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\NumberGenerator.cs" />
     <Compile Include="Models\Register.cs" />
     <Compile Include="Models\TransactionInfo.cs">
       <DependentUpon>Model.tt</DependentUpon>
